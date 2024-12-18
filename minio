@@ -7,3 +7,23 @@ NX_MAIN_DATABASE_NAME: nxmain
   NX_MAIN_DB_SERVER_PORT: "5432"
   NX_MAIN_DB_USERNAME: postgres
   NX_MAIN_HOST_SERVER: postgresql
+
+
+
+
+You can use the following code to create the service /etc/systemd/system/xiaodu-flannel-tx-off.service, then enable and start it. (The service file can be downloaded using this link.)
+
+sudo tee /etc/systemd/system/ethtool-flannel-tx-off.service > /dev/null << EOF
+[Unit]
+Description=Turn off checksum offload on flannel.1
+After=sys-devices-virtual-net-flannel.1.device
+
+[Install]
+WantedBy=sys-devices-virtual-net-flannel.1.device
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/ethtool -K flannel.1 tx-checksum-ip-generic off
+EOF
+sudo systemctl enable ethtool-flannel-tx-off
+sudo systemctl start ethtool-flannel-tx-off
